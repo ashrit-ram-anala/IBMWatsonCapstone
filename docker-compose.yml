@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: banking-pipeline-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: banking_pipeline
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - banking-network
+
+  # FastAPI Backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: banking-pipeline-backend
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@postgres:5432/banking_pipeline
+      - WATSONX_API_KEY=${WATSONX_API_KEY}
+      - WATSONX_PROJECT_ID=${WATSONX_PROJECT_ID}
+      - IBM_CLOUD_API_KEY=${IBM_CLOUD_API_KEY}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - backend_uploads:/app/uploads
+      - backend_processed:/app/processed
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - banking-network
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # Angular Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: banking-pipeline-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    networks:
+      - banking-network
+
+networks:
+  banking-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+  backend_uploads:
+    driver: local
+  backend_processed:
+    driver: local
