@@ -1,0 +1,153 @@
+.dashboard-container {
+  h1 {
+    margin-bottom: 24px;
+    color: #333;
+  }
+}
+
+.loading-container,
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+  }
+
+  p {
+    font-size: 16px;
+    color: #666;
+  }
+}
+
+.metrics-grid {
+  mat-grid-list {
+    margin-bottom: 24px;
+  }
+}
+
+.metric-card {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  mat-card-content {
+    text-align: center;
+    padding: 0;
+  }
+
+  .metric-icon {
+    mat-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+      color: #3f51b5;
+    }
+
+    &.warning mat-icon {
+      color: #ff9800;
+    }
+  }
+
+  .metric-value {
+    font-size: 32px;
+    font-weight: 600;
+    color: #333;
+    margin: 12px 0 4px;
+  }
+
+  .metric-label {
+    font-size: 14px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+.status-card {
+  margin-top: 24px;
+
+  mat-card-header {
+    margin-bottom: 16px;
+  }
+
+  mat-card-title {
+    font-size: 20px;
+    font-weight: 500;
+  }
+}
+
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+  padding: 16px 0;
+
+  .status-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    .status-icon {
+      font-size: 40px;
+      width: 40px;
+      height: 40px;
+
+      &.running {
+        color: #2196f3;
+        animation: spin 2s linear infinite;
+      }
+
+      &.completed {
+        color: #4caf50;
+      }
+
+      &.failed {
+        color: #f44336;
+      }
+
+      &.cleaned {
+        color: #9c27b0;
+      }
+    }
+
+    .status-info {
+      .status-value {
+        font-size: 28px;
+        font-weight: 600;
+        color: #333;
+        line-height: 1;
+      }
+
+      .status-label {
+        font-size: 14px;
+        color: #666;
+        margin-top: 4px;
+      }
+    }
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

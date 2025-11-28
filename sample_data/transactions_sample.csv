@@ -1,0 +1,31 @@
+transaction_id,customer_id,account_number,amount,balance,currency,transaction_date,transaction_type,status,description,merchant,category,location,country_code
+TXN001,CUST001,ACC1001,150.50,1500.00,USD,2024-01-15 10:30:00,deposit,completed,Salary deposit,Company Inc,income,New York,US
+TXN002,CUST002,ACC1002,-50.00,200.00,USD,2024-01-16 14:20:00,withdrawal,completed,ATM withdrawal,Chase ATM,cash,Los Angeles,US
+TXN003,CUST001,ACC1001,2000.00,3500.00,USD,2024-01-17 09:15:00,deposit,completed,Bonus payment,Company Inc,income,New York,US
+TXN004,CUST003,ACC1003,0.00,500.00,USD,2024-01-18 16:45:00,payment,failed,Online purchase,Amazon,shopping,Chicago,US
+TXN005,CUST002,ACC1002,100.00,-50.00,USD,2024-01-19 11:00:00,deposit,completed,Check deposit,Bank Branch,income,Los Angeles,US
+TXN006,CUST004,ACC1004,-500.00,1500.00,USD,2024-01-20 08:30:00,payment,completed,Rent payment,Property Management,housing,Seattle,US
+TXN007,CUST005,ACC1005,75.25,825.25,USD,2024-01-21 12:00:00,deposit,completed,Cash deposit,Bank Branch,income,Boston,US
+TXN008,CUST001,ACC1001,-1200.00,2300.00,USD,2024-01-22 15:30:00,transfer,completed,Wire transfer,Bank Transfer,transfer,New York,US
+TXN009,CUST003,ACC1003,-25.00,475.00,USD,2024-01-23 10:15:00,payment,completed,Coffee shop,Starbucks,food,Chicago,US
+TXN010,CUST006,ACC1006,5000.00,5000.00,USD,2024-01-24 09:00:00,deposit,completed,Initial deposit,Bank Branch,income,Miami,US
+TXN011,CUST002,ACC1002,-150.00,50.00,USD,2024-01-25 14:30:00,payment,completed,Grocery shopping,Whole Foods,food,Los Angeles,US
+TXN012,CUST007,ACC1007,300.00,300.00,USD,2024-01-26 11:45:00,deposit,completed,Freelance payment,PayPal,income,Austin,US
+TXN013,CUST004,ACC1004,-80.00,1420.00,USD,2024-01-27 16:00:00,payment,completed,Utility bill,Electric Company,utilities,Seattle,US
+TXN014,CUST001,ACC1001,10000.00,12300.00,USD,2024-01-28 10:00:00,deposit,completed,Investment return,Investment Firm,income,New York,US
+TXN015,CUST008,ACC1008,-2000.00,3000.00,USD,2024-01-29 13:20:00,withdrawal,completed,Large withdrawal,Bank Branch,cash,Denver,US
+TXN016,CUST005,ACC1005,-40.00,785.25,USD,2024-01-30 12:30:00,payment,completed,Gas station,Shell,transportation,Boston,US
+TXN017,CUST003,ACC1003,200.00,675.00,USD,2024-01-31 09:30:00,deposit,completed,Salary deposit,Employer,income,Chicago,US
+TXN018,CUST009,ACC1009,0.00,1000.00,USD,2024-02-01 14:00:00,payment,cancelled,Cancelled transaction,Online Merchant,shopping,Portland,US
+TXN019,CUST006,ACC1006,-100.00,4900.00,USD,2024-02-02 11:15:00,payment,completed,Restaurant,Fancy Restaurant,food,Miami,US
+TXN020,CUST007,ACC1007,-50.00,250.00,USD,2024-02-03 15:45:00,payment,completed,Subscription,Netflix,entertainment,Austin,US
+TXN021,CUST010,ACC1010,1500.00,-200.00,USD,2024-02-04 10:30:00,deposit,completed,Refund processing,Online Store,refund,Phoenix,US
+TXN022,CUST002,ACC1002,500.00,550.00,USD,2024-02-05 09:00:00,deposit,completed,Tax refund,IRS,income,Los Angeles,US
+TXN023,CUST004,ACC1004,-1000.00,420.00,USD,2024-02-06 13:30:00,payment,completed,Car payment,Auto Finance,transportation,Seattle,US
+TXN024,CUST011,ACC1011,250.00,250.00,USD,2024-02-07 11:00:00,deposit,completed,Birthday gift,Family Transfer,income,Atlanta,US
+TXN025,CUST001,ACC1001,-3000.00,9300.00,USD,2024-02-08 14:20:00,payment,completed,Credit card payment,Bank Payment,credit,New York,US
+TXN026,CUST005,ACC1005,1000.00,1785.25,USD,2024-02-09 10:15:00,deposit,completed,Commission payment,Sales Company,income,Boston,US
+TXN027,CUST008,ACC1008,500.00,3500.00,USD,2024-02-10 12:00:00,deposit,completed,Interest payment,Bank Interest,income,Denver,US
+TXN028,CUST003,ACC1003,-200.00,475.00,USD,2024-02-11 15:30:00,payment,failed,Insufficient funds,Online Store,shopping,Chicago,US
+TXN029,CUST012,ACC1012,750.00,750.00,USD,2024-02-12 09:45:00,deposit,completed,Contract payment,Client,income,San Francisco,US
+TXN030,CUST006,ACC1006,-5000.00,-100.00,USD,2024-02-13 16:00:00,payment,completed,Investment purchase,Investment Broker,investment,Miami,US

@@ -1,0 +1,100 @@
+<div class="upload-container">
+  <h1>Upload Banking Data</h1>
+
+  <mat-card class="upload-card">
+    <mat-card-content>
+      <!-- Drop Zone -->
+      <div
+        class="drop-zone"
+        [class.drag-over]="dragOver"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave($event)"
+        (drop)="onDrop($event)"
+        *ngIf="!selectedFile">
+        <mat-icon class="upload-icon">cloud_upload</mat-icon>
+        <h2>Drag and drop your CSV file here</h2>
+        <p>or</p>
+        <button mat-raised-button color="primary" (click)="fileInput.click()">
+          <mat-icon>folder_open</mat-icon>
+          Browse Files
+        </button>
+        <input
+          #fileInput
+          type="file"
+          accept=".csv"
+          (change)="onFileSelected($event)"
+          style="display: none;">
+        <p class="file-info">Maximum file size: 100MB | Supported format: CSV</p>
+      </div>
+
+      <!-- Selected File -->
+      <div class="selected-file" *ngIf="selectedFile && !uploading">
+        <div class="file-details">
+          <mat-icon class="file-icon">description</mat-icon>
+          <div class="file-info-section">
+            <h3>{{ selectedFile.name }}</h3>
+            <p>Size: {{ formatFileSize(selectedFile.size) }}</p>
+          </div>
+          <button mat-icon-button color="warn" (click)="removeFile()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        <div class="upload-actions">
+          <button mat-raised-button color="primary" (click)="uploadFile()">
+            <mat-icon>upload</mat-icon>
+            Upload and Process
+          </button>
+        </div>
+      </div>
+
+      <!-- Upload Progress -->
+      <div class="upload-progress" *ngIf="uploading">
+        <div class="progress-header">
+          <mat-icon class="progress-icon">sync</mat-icon>
+          <div>
+            <h3>Uploading {{ selectedFile?.name }}</h3>
+            <p>{{ uploadProgress }}% complete</p>
+          </div>
+        </div>
+        <mat-progress-bar mode="determinate" [value]="uploadProgress"></mat-progress-bar>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Instructions -->
+  <mat-card class="instructions-card">
+    <mat-card-header>
+      <mat-card-title>Data Requirements</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <h3>Required Columns:</h3>
+      <ul>
+        <li><strong>transaction_id</strong> - Unique transaction identifier</li>
+        <li><strong>customer_id</strong> - Customer identifier</li>
+        <li><strong>amount</strong> - Transaction amount (numeric)</li>
+        <li><strong>transaction_date</strong> - Date of transaction</li>
+        <li><strong>status</strong> - Transaction status (completed, pending, failed, etc.)</li>
+      </ul>
+
+      <h3>Optional Columns:</h3>
+      <ul>
+        <li><strong>account_number</strong> - Bank account number</li>
+        <li><strong>balance</strong> - Account balance after transaction</li>
+        <li><strong>transaction_type</strong> - Type (deposit, withdrawal, transfer, payment)</li>
+        <li><strong>description</strong> - Transaction description</li>
+        <li><strong>merchant</strong> - Merchant name</li>
+        <li><strong>currency</strong> - Currency code (default: USD)</li>
+      </ul>
+
+      <h3>What Happens Next:</h3>
+      <ol>
+        <li>Your file will be uploaded to the secure pipeline</li>
+        <li>Data will be validated against banking schema</li>
+        <li>Automated cleaning and normalization will be applied</li>
+        <li>AI-powered anomaly detection will identify issues</li>
+        <li>You'll receive a detailed quality report</li>
+        <li>Clean data will be available for download</li>
+      </ol>
+    </mat-card-content>
+  </mat-card>
+</div>

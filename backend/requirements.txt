@@ -1,0 +1,49 @@
+# FastAPI Backend Dependencies
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+pydantic==2.5.3
+pydantic-settings==2.1.0
+
+# Database
+sqlalchemy==2.0.25
+asyncpg==0.29.0
+psycopg2-binary==2.9.9
+alembic==1.13.1
+
+# IBM Watsonx
+ibm-watsonx-ai==0.2.0
+ibm-watson==8.0.0
+ibm-cloud-sdk-core==3.18.2
+
+# Data Processing
+pandas==2.2.0
+numpy==1.26.3
+python-multipart==0.0.6
+
+# Validation & Cleaning
+great-expectations==0.18.8
+pandera==0.18.0
+
+# LLM Integration
+langchain==0.1.4
+langchain-ibm==0.0.1
+
+# API & Async
+httpx==0.26.0
+aiofiles==23.2.1
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+
+# Monitoring & Logging
+python-json-logger==2.0.7
+prometheus-client==0.19.0
+
+# Testing
+pytest==7.4.4
+pytest-asyncio==0.23.3
+pytest-cov==4.1.0
+httpx==0.26.0
+
+# Utils
+python-dotenv==1.0.0
+tenacity==8.2.3

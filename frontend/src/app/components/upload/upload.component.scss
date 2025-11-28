@@ -1,0 +1,183 @@
+.upload-container {
+  max-width: 800px;
+  margin: 0 auto;
+
+  h1 {
+    margin-bottom: 24px;
+    color: #333;
+  }
+}
+
+.upload-card {
+  margin-bottom: 24px;
+
+  mat-card-content {
+    padding: 32px;
+  }
+}
+
+.drop-zone {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 48px;
+  text-align: center;
+  transition: all 0.3s ease;
+  background-color: #fafafa;
+
+  &:hover,
+  &.drag-over {
+    border-color: #3f51b5;
+    background-color: #f0f4ff;
+  }
+
+  .upload-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    color: #3f51b5;
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 500;
+    margin: 0 0 16px 0;
+    color: #333;
+  }
+
+  p {
+    color: #666;
+    margin: 8px 0;
+  }
+
+  button {
+    margin: 16px 0;
+  }
+
+  .file-info {
+    font-size: 12px;
+    color: #999;
+    margin-top: 16px;
+  }
+}
+
+.selected-file {
+  .file-details {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 24px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    margin-bottom: 24px;
+
+    .file-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+      color: #3f51b5;
+    }
+
+    .file-info-section {
+      flex: 1;
+
+      h3 {
+        margin: 0 0 8px 0;
+        font-size: 16px;
+        font-weight: 500;
+        color: #333;
+      }
+
+      p {
+        margin: 0;
+        font-size: 14px;
+        color: #666;
+      }
+    }
+  }
+
+  .upload-actions {
+    display: flex;
+    justify-content: center;
+
+    button {
+      padding: 0 32px;
+    }
+  }
+}
+
+.upload-progress {
+  .progress-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+
+    .progress-icon {
+      font-size: 36px;
+      width: 36px;
+      height: 36px;
+      color: #3f51b5;
+      animation: spin 2s linear infinite;
+    }
+
+    h3 {
+      margin: 0 0 4px 0;
+      font-size: 16px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    p {
+      margin: 0;
+      font-size: 14px;
+      color: #666;
+    }
+  }
+}
+
+.instructions-card {
+  mat-card-header {
+    margin-bottom: 16px;
+  }
+
+  mat-card-title {
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  h3 {
+    font-size: 16px;
+    font-weight: 500;
+    margin: 16px 0 8px 0;
+    color: #333;
+  }
+
+  ul, ol {
+    margin: 0 0 16px 0;
+    padding-left: 24px;
+
+    li {
+      margin: 8px 0;
+      color: #666;
+      line-height: 1.6;
+
+      strong {
+        color: #333;
+        font-family: monospace;
+        background-color: #f5f5f5;
+        padding: 2px 6px;
+        border-radius: 3px;
+      }
+    }
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

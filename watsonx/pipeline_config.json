@@ -1,0 +1,225 @@
+{
+  "pipeline_name": "Banking Data Cleaning Pipeline",
+  "pipeline_version": "1.0.0",
+  "description": "AI-powered data validation and cleaning pipeline for banking datasets",
+  "nodes": [
+    {
+      "node_id": "ingestion_node",
+      "node_name": "Data Ingestion Node",
+      "node_type": "ingestion",
+      "description": "Ingests data from CSV, SQL, or API sources",
+      "implementation": "backend.app.watsonx.nodes.ingestion_node.IngestionNode",
+      "inputs": {
+        "source_type": {
+          "type": "string",
+          "required": true,
+          "enum": ["csv", "sql", "api"],
+          "description": "Type of data source"
+        },
+        "source_path": {
+          "type": "string",
+          "required": false,
+          "description": "File path for CSV sources"
+        },
+        "connection_string": {
+          "type": "string",
+          "required": false,
+          "description": "Database connection string for SQL sources"
+        },
+        "api_endpoint": {
+          "type": "string",
+          "required": false,
+          "description": "API endpoint URL for API sources"
+        }
+      },
+      "outputs": {
+        "dataframe": {
+          "type": "pandas.DataFrame",
+          "description": "Standardized dataframe"
+        },
+        "rows_ingested": {
+          "type": "integer",
+          "description": "Number of rows ingested"
+        }
+      }
+    },
+    {
+      "node_id": "validation_node",
+      "node_name": "Schema Validator Node",
+      "node_type": "validation",
+      "description": "Validates data against banking schema rules",
+      "implementation": "backend.app.watsonx.nodes.validation_node.ValidationNode",
+      "inputs": {
+        "dataframe": {
+          "type": "pandas.DataFrame",
+          "required": true
+        }
+      },
+      "outputs": {
+        "dataframe": {
+          "type": "pandas.DataFrame",
+          "description": "Validated dataframe with validation flags"
+        },
+        "metrics": {
+          "type": "dict",
+          "description": "Validation metrics"
+        }
+      },
+      "config": {
+        "required_columns": [
+          "transaction_id",
+          "customer_id",
+          "amount",
+          "transaction_date",
+          "status"
+        ]
+      }
+    },
+    {
+      "node_id": "cleaning_node",
+      "node_name": "Data Cleaning Node",
+      "node_type": "cleaning",
+      "description": "Performs data cleaning, normalization, and imputation",
+      "implementation": "backend.app.watsonx.nodes.cleaning_node.CleaningNode",
+      "inputs": {
+        "dataframe": {
+          "type": "pandas.DataFrame",
+          "required": true
+        }
+      },
+      "outputs": {
+        "dataframe": {
+          "type": "pandas.DataFrame",
+          "description": "Cleaned dataframe"
+        },
+        "metrics": {
+          "type": "dict",
+          "description": "Cleaning metrics"
+        }
+      },
+      "operations": [
+        "standardize_transaction_ids",
+        "normalize_amounts",
+        "clean_status_values",
+        "handle_missing_values",
+        "remove_duplicates",
+        "normalize_dates"
+      ]
+    },
+    {
+      "node_id": "anomaly_detector_node",
+      "node_name": "Anomaly Detector Node",
+      "node_type": "anomaly_detection",
+      "description": "Detects anomalies using rule-based and AI-powered methods",
+      "implementation": "backend.app.watsonx.nodes.anomaly_detector_node.AnomalyDetectorNode",
+      "inputs": {
+        "dataframe": {
+          "type": "pandas.DataFrame",
+          "required": true
+        }
+      },
+      "outputs": {
+        "dataframe": {
+          "type": "pandas.DataFrame",
+          "description": "Dataframe with anomaly flags"
+        },
+        "anomalies": {
+          "type": "list",
+          "description": "List of detected anomalies"
+        }
+      },
+      "config": {
+        "confidence_threshold": 0.75,
+        "use_llm_detection": true,
+        "llm_sample_size": 100,
+        "detection_methods": [
+          "rule_based",
+          "llm_semantic"
+        ]
+      },
+      "watsonx_integration": {
+        "model_id": "ibm/granite-13b-chat-v2",
+        "max_tokens": 500,
+        "temperature": 0.3,
+        "detection_types": [
+          "negative_balance",
+          "suspicious_amount",
+          "status_mismatch",
+          "semantic_inconsistency"
+        ]
+      }
+    },
+    {
+      "node_id": "review_node",
+      "node_name": "Review & Feedback Node",
+      "node_type": "review",
+      "description": "Computes quality metrics and generates feedback",
+      "implementation": "backend.app.watsonx.pipeline.DataPipeline._compute_review_metrics",
+      "inputs": {
+        "dataframe": {
+          "type": "pandas.DataFrame",
+          "required": true
+        },
+        "stage_results": {
+          "type": "dict",
+          "required": true
+        }
+      },
+      "outputs": {
+        "metrics": {
+          "type": "dict",
+          "description": "Quality metrics"
+        }
+      },
+      "metrics_computed": [
+        "quality_score",
+        "completeness_score",
+        "validation_rate",
+        "anomaly_rate",
+        "cleaning_rate"
+      ]
+    },
+    {
+      "node_id": "publishing_node",
+      "node_name": "Publishing Node",
+      "node_type": "publishing",
+      "description": "Publishes cleaned data to PostgreSQL",
+      "implementation": "backend.app.watsonx.pipeline.DataPipeline",
+      "inputs": {
+        "dataframe": {
+          "type": "pandas.DataFrame",
+          "required": true
+        }
+      },
+      "outputs": {
+        "rows_published": {
+          "type": "integer",
+          "description": "Number of rows published"
+        }
+      },
+      "target": {
+        "type": "postgresql",
+        "table": "transactions",
+        "include_metadata": true
+      }
+    }
+  ],
+  "execution_order": [
+    "ingestion_node",
+    "validation_node",
+    "cleaning_node",
+    "anomaly_detector_node",
+    "review_node",
+    "publishing_node"
+  ],
+  "error_handling": {
+    "on_node_failure": "stop_pipeline",
+    "retry_count": 0,
+    "log_errors": true
+  },
+  "performance": {
+    "max_concurrent_pipelines": 5,
+    "pipeline_timeout_seconds": 3600,
+    "enable_caching": false
+  }
+}
