@@ -12,7 +12,6 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
-# Store active pipelines (in production, use Redis or database)
 active_pipelines = {}
 
 
@@ -22,24 +21,12 @@ async def ingest_csv(
     file: UploadFile = File(...),
     auto_process: bool = True
 ):
-    """
-    Upload and ingest CSV file.
-
-    Args:
-        file: CSV file to upload
-        auto_process: Whether to automatically run the pipeline
-
-    Returns:
-        Upload and pipeline status
-    """
     logger.info(f"Received CSV upload: {file.filename}")
 
-    # Validate file type
     if not file.filename.endswith('.csv'):
         raise HTTPException(status_code=400, detail="Only CSV files are supported")
 
     try:
-        # Save uploaded file
         file_id = str(uuid.uuid4())
         file_path = os.path.join(settings.UPLOAD_DIR, f"{file_id}_{file.filename}")
 
@@ -49,19 +36,16 @@ async def ingest_csv(
 
         logger.info(f"Saved file to: {file_path}")
 
-        # If auto_process is True, start pipeline in background
         if auto_process:
             pipeline = DataPipeline()
             pipeline_id = pipeline.pipeline_id
 
-            # Store pipeline reference
             active_pipelines[pipeline_id] = {
                 "status": "running",
                 "file_path": file_path,
                 "file_name": file.filename
             }
 
-            # Run pipeline in background
             background_tasks.add_task(
                 execute_pipeline_background,
                 pipeline,
@@ -98,16 +82,6 @@ async def ingest_sql(
     connection_string: str,
     query: Optional[str] = None
 ):
-    """
-    Ingest data from SQL database.
-
-    Args:
-        connection_string: Database connection string
-        query: SQL query to execute (optional)
-
-    Returns:
-        Pipeline status
-    """
     logger.info("Received SQL ingestion request")
 
     try:
@@ -119,7 +93,6 @@ async def ingest_sql(
             "source_type": "sql"
         }
 
-        # Run pipeline in background
         background_tasks.add_task(
             execute_pipeline_background,
             pipeline,
@@ -146,15 +119,6 @@ async def ingest_api(
     background_tasks: BackgroundTasks,
     api_endpoint: str
 ):
-    """
-    Ingest data from REST API.
-
-    Args:
-        api_endpoint: API endpoint URL
-
-    Returns:
-        Pipeline status
-    """
     logger.info(f"Received API ingestion request: {api_endpoint}")
 
     try:
@@ -167,7 +131,6 @@ async def ingest_api(
             "api_endpoint": api_endpoint
         }
 
-        # Run pipeline in background
         background_tasks.add_task(
             execute_pipeline_background,
             pipeline,
@@ -196,7 +159,6 @@ async def execute_pipeline_background(
     pipeline_id: str,
     **kwargs
 ):
-    """Execute pipeline in background."""
     try:
         logger.info(f"Starting background pipeline execution: {pipeline_id}")
 
@@ -206,7 +168,6 @@ async def execute_pipeline_background(
             **kwargs
         )
 
-        # Update pipeline status
         active_pipelines[pipeline_id] = {
             "status": result.get("status"),
             "result": result,

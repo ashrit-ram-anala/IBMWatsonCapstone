@@ -9,10 +9,6 @@ logger = logging.getLogger(__name__)
 
 
 class ValidationNode:
-    """
-    Node 2: Schema Validator
-    Enforces banking schema rules (types, required columns).
-    """
 
     def __init__(self, required_columns: List[str] = None):
         self.node_id = "validation_node"
@@ -26,22 +22,12 @@ class ValidationNode:
         ]
 
     async def execute(self, dataframe: pd.DataFrame, **kwargs) -> Dict[str, Any]:
-        """
-        Execute the validation node.
-
-        Args:
-            dataframe: Input dataframe to validate
-
-        Returns:
-            Dictionary with validation results
-        """
         logger.info(f"Starting validation for {len(dataframe)} rows")
 
         df = dataframe.copy()
         validation_errors = []
         rows_with_errors = []
 
-        # Check required columns
         missing_columns = self._check_required_columns(df)
         if missing_columns:
             return {
@@ -51,11 +37,9 @@ class ValidationNode:
                 "dataframe": df
             }
 
-        # Validate each row
         for idx, row in df.iterrows():
             row_errors = []
 
-            # Validate transaction_id
             if not self._validate_transaction_id(row.get('transaction_id')):
                 row_errors.append({
                     "field": "transaction_id",
@@ -63,7 +47,6 @@ class ValidationNode:
                     "value": row.get('transaction_id')
                 })
 
-            # Validate customer_id
             if not self._validate_customer_id(row.get('customer_id')):
                 row_errors.append({
                     "field": "customer_id",
@@ -71,7 +54,6 @@ class ValidationNode:
                     "value": row.get('customer_id')
                 })
 
-            # Validate amount
             amount_error = self._validate_amount(row.get('amount'))
             if amount_error:
                 row_errors.append({
@@ -80,7 +62,6 @@ class ValidationNode:
                     "value": row.get('amount')
                 })
 
-            # Validate date
             date_error = self._validate_date(row.get('transaction_date'))
             if date_error:
                 row_errors.append({
@@ -89,7 +70,6 @@ class ValidationNode:
                     "value": row.get('transaction_date')
                 })
 
-            # Validate status
             if not self._validate_status(row.get('status')):
                 row_errors.append({
                     "field": "status",
@@ -105,7 +85,6 @@ class ValidationNode:
             else:
                 df.at[idx, 'is_valid'] = True
 
-        # Calculate validation metrics
         total_rows = len(df)
         valid_rows = total_rows - len(rows_with_errors)
         validation_rate = (valid_rows / total_rows * 100) if total_rows > 0 else 0
@@ -121,7 +100,7 @@ class ValidationNode:
                 "validation_rate": round(validation_rate, 2),
                 "error_count": len(validation_errors)
             },
-            "validation_errors": validation_errors[:100],  # Limit to first 100 errors
+            "validation_errors": validation_errors[:100],
             "rows_with_errors": rows_with_errors[:100]
         }
 
@@ -129,12 +108,10 @@ class ValidationNode:
         return result
 
     def _check_required_columns(self, df: pd.DataFrame) -> List[str]:
-        """Check if all required columns are present."""
         missing = [col for col in self.required_columns if col not in df.columns]
         return missing
 
     def _validate_transaction_id(self, value: Any) -> bool:
-        """Validate transaction ID format."""
         if pd.isna(value):
             return False
         if not isinstance(value, str):
@@ -142,7 +119,6 @@ class ValidationNode:
         return len(value) > 0
 
     def _validate_customer_id(self, value: Any) -> bool:
-        """Validate customer ID format."""
         if pd.isna(value):
             return False
         if not isinstance(value, str):
@@ -150,7 +126,6 @@ class ValidationNode:
         return len(value) > 0
 
     def _validate_amount(self, value: Any) -> str:
-        """Validate amount field."""
         if pd.isna(value):
             return "Amount is missing"
 
@@ -158,28 +133,22 @@ class ValidationNode:
             amount = float(value)
             if amount == 0:
                 return "Amount is zero"
-            # Note: negative amounts might be valid for refunds/withdrawals
             return ""
         except (ValueError, TypeError):
             return "Amount is not a valid number"
 
     def _validate_date(self, value: Any) -> str:
-        """Validate transaction date."""
         if pd.isna(value):
             return "Date is missing"
 
-        # Check if already a datetime
         if isinstance(value, (datetime, pd.Timestamp)):
-            # Check if date is in reasonable range (not in future, not too old)
             now = datetime.now()
             if value > now:
                 return "Date is in the future"
-            # Check if date is older than 10 years
             if (now - value).days > 3650:
                 return "Date is more than 10 years old"
             return ""
 
-        # Try to parse string date
         try:
             date = pd.to_datetime(value)
             now = datetime.now()
@@ -192,7 +161,6 @@ class ValidationNode:
             return "Invalid date format"
 
     def _validate_status(self, value: Any) -> bool:
-        """Validate transaction status."""
         if pd.isna(value):
             return False
 
@@ -207,7 +175,6 @@ class ValidationNode:
         return False
 
     def get_node_config(self) -> Dict[str, Any]:
-        """Get node configuration for Watsonx Orchestrate."""
         return {
             "node_id": self.node_id,
             "node_name": self.node_name,

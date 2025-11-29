@@ -12,12 +12,6 @@ router = APIRouter()
 
 @router.get("/")
 async def list_datasets() -> Dict[str, Any]:
-    """
-    List all processed datasets.
-
-    Returns:
-        List of datasets with their status
-    """
     datasets = []
 
     for pipeline_id, pipeline_data in active_pipelines.items():
@@ -43,15 +37,6 @@ async def list_datasets() -> Dict[str, Any]:
 
 @router.get("/{pipeline_id}")
 async def get_dataset(pipeline_id: str) -> Dict[str, Any]:
-    """
-    Get detailed information about a specific dataset.
-
-    Args:
-        pipeline_id: Pipeline/Dataset ID
-
-    Returns:
-        Detailed dataset information
-    """
     if pipeline_id not in active_pipelines:
         raise HTTPException(status_code=404, detail=f"Dataset {pipeline_id} not found")
 
@@ -71,15 +56,6 @@ async def get_dataset(pipeline_id: str) -> Dict[str, Any]:
 
 @router.get("/{pipeline_id}/download")
 async def download_cleaned_dataset(pipeline_id: str) -> Dict[str, Any]:
-    """
-    Download cleaned dataset (placeholder - would return CSV file).
-
-    Args:
-        pipeline_id: Pipeline/Dataset ID
-
-    Returns:
-        Download information
-    """
     if pipeline_id not in active_pipelines:
         raise HTTPException(status_code=404, detail=f"Dataset {pipeline_id} not found")
 
@@ -88,8 +64,6 @@ async def download_cleaned_dataset(pipeline_id: str) -> Dict[str, Any]:
     if pipeline_data.get("status") != "completed":
         raise HTTPException(status_code=400, detail="Dataset processing not completed")
 
-    # In a real implementation, this would return the CSV file
-    # For now, return metadata about the cleaned dataset
     result = pipeline_data.get("result", {})
     publishing_stage = result.get("stages", {}).get("publishing", {})
 
@@ -97,5 +71,5 @@ async def download_cleaned_dataset(pipeline_id: str) -> Dict[str, Any]:
         "message": "Dataset ready for download",
         "pipeline_id": pipeline_id,
         "rows": publishing_stage.get("rows_published", 0),
-        "download_url": f"/api/v1/datasets/{pipeline_id}/file"  # Placeholder
+        "download_url": f"/api/v1/datasets/{pipeline_id}/file"
     }

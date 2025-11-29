@@ -9,10 +9,6 @@ logger = logging.getLogger(__name__)
 
 
 class IngestionNode:
-    """
-    Node 1: Data Ingestion
-    Converts raw data sources (CSV, SQL, API) to standardized dataframe.
-    """
 
     def __init__(self):
         self.node_id = "ingestion_node"
@@ -50,7 +46,6 @@ class IngestionNode:
             else:
                 raise ValueError(f"Unsupported source type: {source_type}")
 
-            # Standardize column names
             df = self._standardize_columns(df)
 
             result = {
@@ -80,10 +75,8 @@ class IngestionNode:
             }
 
     async def _ingest_csv(self, file_path: str) -> pd.DataFrame:
-        """Ingest data from CSV file."""
         logger.info(f"Reading CSV file: {file_path}")
 
-        # Try different encodings
         encodings = ['utf-8', 'latin-1', 'iso-8859-1', 'cp1252']
 
         for encoding in encodings:
@@ -107,7 +100,6 @@ class IngestionNode:
         raise ValueError(f"Could not read CSV file with any supported encoding")
 
     async def _ingest_sql(self, connection_string: str, query: Optional[str] = None) -> pd.DataFrame:
-        """Ingest data from SQL database."""
         logger.info("Reading from SQL database")
 
         from sqlalchemy import create_engine
@@ -115,7 +107,6 @@ class IngestionNode:
         engine = create_engine(connection_string)
 
         if not query:
-            # Default query for banking transactions
             query = "SELECT * FROM transactions"
 
         df = pd.read_sql(query, engine)
@@ -124,7 +115,6 @@ class IngestionNode:
         return df
 
     async def _ingest_api(self, api_endpoint: str) -> pd.DataFrame:
-        """Ingest data from REST API."""
         logger.info(f"Fetching data from API: {api_endpoint}")
 
         import httpx
@@ -135,11 +125,9 @@ class IngestionNode:
 
             data = response.json()
 
-            # Convert JSON to DataFrame
             if isinstance(data, list):
                 df = pd.DataFrame(data)
             elif isinstance(data, dict):
-                # Check if data has a 'data' or 'records' key
                 if 'data' in data:
                     df = pd.DataFrame(data['data'])
                 elif 'records' in data:
@@ -153,11 +141,8 @@ class IngestionNode:
             return df
 
     def _standardize_columns(self, df: pd.DataFrame) -> pd.DataFrame:
-        """Standardize column names to lowercase with underscores."""
-        # Convert column names to lowercase and replace spaces with underscores
         df.columns = df.columns.str.lower().str.replace(' ', '_').str.replace('-', '_')
 
-        # Common column name mappings
         column_mappings = {
             'txn_id': 'transaction_id',
             'trans_id': 'transaction_id',
@@ -175,14 +160,12 @@ class IngestionNode:
             'txn_desc': 'description',
         }
 
-        # Apply mappings
         df.rename(columns=column_mappings, inplace=True)
 
         logger.info(f"Standardized columns: {list(df.columns)}")
         return df
 
     def get_node_config(self) -> Dict[str, Any]:
-        """Get node configuration for Watsonx Orchestrate."""
         return {
             "node_id": self.node_id,
             "node_name": self.node_name,

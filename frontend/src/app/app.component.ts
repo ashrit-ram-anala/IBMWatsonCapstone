@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -13,6 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
   imports: [
     CommonModule,
     RouterOutlet,
+    RouterModule,
     MatToolbarModule,
     MatSidenavModule,
     MatListModule,

@@ -15,16 +15,6 @@ async def get_all_anomalies(
     severity: Optional[str] = None,
     limit: int = 100
 ) -> Dict[str, Any]:
-    """
-    Get all detected anomalies across all pipelines.
-
-    Args:
-        severity: Filter by severity (low, medium, high, critical)
-        limit: Maximum number of anomalies to return
-
-    Returns:
-        List of anomalies
-    """
     all_anomalies = []
 
     for pipeline_id, pipeline_data in active_pipelines.items():
@@ -38,11 +28,9 @@ async def get_all_anomalies(
             anomaly_with_pipeline["pipeline_id"] = pipeline_id
             all_anomalies.append(anomaly_with_pipeline)
 
-    # Filter by severity if specified
     if severity:
         all_anomalies = [a for a in all_anomalies if a.get("severity") == severity.lower()]
 
-    # Apply limit
     all_anomalies = all_anomalies[:limit]
 
     return {
@@ -53,15 +41,6 @@ async def get_all_anomalies(
 
 @router.get("/{pipeline_id}")
 async def get_pipeline_anomalies(pipeline_id: str) -> Dict[str, Any]:
-    """
-    Get anomalies detected in a specific pipeline.
-
-    Args:
-        pipeline_id: Pipeline ID to query
-
-    Returns:
-        List of anomalies for the pipeline
-    """
     if pipeline_id not in active_pipelines:
         raise HTTPException(status_code=404, detail=f"Pipeline {pipeline_id} not found")
 
@@ -75,7 +54,6 @@ async def get_pipeline_anomalies(pipeline_id: str) -> Dict[str, Any]:
     anomaly_stage = stages.get("anomaly_detection", {})
     anomalies = anomaly_stage.get("anomalies", [])
 
-    # Group by severity
     by_severity = {
         "critical": [],
         "high": [],
@@ -87,7 +65,6 @@ async def get_pipeline_anomalies(pipeline_id: str) -> Dict[str, Any]:
         severity = anomaly.get("severity", "medium")
         by_severity[severity].append(anomaly)
 
-    # Group by type
     by_type = {}
     for anomaly in anomalies:
         anomaly_type = anomaly.get("anomaly_type", "other")
@@ -116,12 +93,6 @@ async def get_pipeline_anomalies(pipeline_id: str) -> Dict[str, Any]:
 
 @router.get("/stats/summary")
 async def get_anomaly_summary() -> Dict[str, Any]:
-    """
-    Get summary statistics for all anomalies.
-
-    Returns:
-        Anomaly statistics
-    """
     total_anomalies = 0
     by_severity = {"critical": 0, "high": 0, "medium": 0, "low": 0}
     by_type = {}
@@ -136,15 +107,12 @@ async def get_anomaly_summary() -> Dict[str, Any]:
         total_anomalies += len(anomalies)
 
         for anomaly in anomalies:
-            # Count by severity
             severity = anomaly.get("severity", "medium")
             by_severity[severity] = by_severity.get(severity, 0) + 1
 
-            # Count by type
             anomaly_type = anomaly.get("anomaly_type", "other")
             by_type[anomaly_type] = by_type.get(anomaly_type, 0) + 1
 
-            # Count by detector
             detector = anomaly.get("detected_by", "unknown")
             by_detector[detector] = by_detector.get(detector, 0) + 1
 

@@ -12,15 +12,6 @@ router = APIRouter()
 
 @router.get("/{pipeline_id}")
 async def get_pipeline_status(pipeline_id: str) -> Dict[str, Any]:
-    """
-    Get pipeline execution status.
-
-    Args:
-        pipeline_id: Pipeline ID to query
-
-    Returns:
-        Pipeline status and results
-    """
     if pipeline_id not in active_pipelines:
         raise HTTPException(status_code=404, detail=f"Pipeline {pipeline_id} not found")
 
@@ -37,12 +28,6 @@ async def get_pipeline_status(pipeline_id: str) -> Dict[str, Any]:
 
 @router.get("/")
 async def list_pipelines() -> Dict[str, Any]:
-    """
-    List all pipeline executions.
-
-    Returns:
-        List of all pipelines
-    """
     pipelines = []
 
     for pipeline_id, data in active_pipelines.items():
@@ -62,15 +47,6 @@ async def list_pipelines() -> Dict[str, Any]:
 
 @router.delete("/{pipeline_id}")
 async def delete_pipeline(pipeline_id: str) -> Dict[str, Any]:
-    """
-    Delete pipeline record.
-
-    Args:
-        pipeline_id: Pipeline ID to delete
-
-    Returns:
-        Deletion confirmation
-    """
     if pipeline_id not in active_pipelines:
         raise HTTPException(status_code=404, detail=f"Pipeline {pipeline_id} not found")
 

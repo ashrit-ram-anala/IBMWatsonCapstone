@@ -12,12 +12,6 @@ router = APIRouter()
 
 @router.get("/")
 async def get_overall_metrics() -> Dict[str, Any]:
-    """
-    Get overall pipeline metrics across all executions.
-
-    Returns:
-        Aggregated metrics
-    """
     total_pipelines = len(active_pipelines)
     completed = sum(1 for p in active_pipelines.values() if p.get("completed"))
     failed = sum(1 for p in active_pipelines.values() if p.get("status") == "failed")
@@ -49,15 +43,6 @@ async def get_overall_metrics() -> Dict[str, Any]:
 
 @router.get("/{pipeline_id}")
 async def get_pipeline_metrics(pipeline_id: str) -> Dict[str, Any]:
-    """
-    Get detailed metrics for a specific pipeline.
-
-    Args:
-        pipeline_id: Pipeline ID to query
-
-    Returns:
-        Detailed pipeline metrics
-    """
     if pipeline_id not in active_pipelines:
         raise HTTPException(status_code=404, detail=f"Pipeline {pipeline_id} not found")
 

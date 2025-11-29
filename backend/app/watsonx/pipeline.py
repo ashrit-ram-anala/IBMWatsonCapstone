@@ -14,18 +14,6 @@ logger = logging.getLogger(__name__)
 
 
 class DataPipeline:
-    """
-    Main pipeline orchestrator that executes all nodes in sequence.
-
-    Pipeline stages:
-    1. Data Ingestion
-    2. Schema Validation
-    3. Data Cleaning
-    4. Anomaly Detection
-    5. Review & Feedback
-    6. Publishing
-    """
-
     def __init__(self):
         self.pipeline_id = str(uuid.uuid4())
         self.nodes = {
@@ -43,18 +31,6 @@ class DataPipeline:
         api_endpoint: Optional[str] = None,
         **kwargs
     ) -> Dict[str, Any]:
-        """
-        Execute the complete data cleaning pipeline.
-
-        Args:
-            source_type: Type of data source (csv, sql, api)
-            source_path: File path for CSV sources
-            connection_string: Database connection for SQL sources
-            api_endpoint: API URL for API sources
-
-        Returns:
-            Complete pipeline execution results
-        """
         logger.info(f"Starting pipeline execution: {self.pipeline_id}")
         start_time = datetime.utcnow()
 
@@ -67,7 +43,6 @@ class DataPipeline:
         }
 
         try:
-            # Stage 1: Data Ingestion
             logger.info("Stage 1: Data Ingestion")
             ingestion_result = await self.nodes["ingestion"].execute(
                 source_type=source_type,
@@ -93,7 +68,6 @@ class DataPipeline:
             dataframe = ingestion_result["dataframe"]
             logger.info(f"Ingestion complete: {len(dataframe)} rows")
 
-            # Stage 2: Schema Validation
             logger.info("Stage 2: Schema Validation")
             validation_result = await self.nodes["validation"].execute(dataframe=dataframe)
 
@@ -113,7 +87,6 @@ class DataPipeline:
             dataframe = validation_result["dataframe"]
             logger.info(f"Validation complete: {validation_result['metrics']['valid_rows']} valid rows")
 
-            # Stage 3: Data Cleaning
             logger.info("Stage 3: Data Cleaning")
             cleaning_result = await self.nodes["cleaning"].execute(dataframe=dataframe)
 
@@ -133,7 +106,6 @@ class DataPipeline:
             dataframe = cleaning_result["dataframe"]
             logger.info(f"Cleaning complete: {cleaning_result['metrics']['rows_modified']} rows modified")
 
-            # Stage 4: Anomaly Detection
             logger.info("Stage 4: Anomaly Detection")
             anomaly_result = await self.nodes["anomaly_detection"].execute(dataframe=dataframe)
 
@@ -154,7 +126,6 @@ class DataPipeline:
             dataframe = anomaly_result["dataframe"]
             logger.info(f"Anomaly detection complete: {len(anomaly_result.get('anomalies', []))} anomalies found")
 
-            # Stage 5: Review & Feedback (compute final metrics)
             logger.info("Stage 5: Review & Feedback")
             review_metrics = self._compute_review_metrics(
                 dataframe,
@@ -169,7 +140,6 @@ class DataPipeline:
                 "metrics": review_metrics
             }
 
-            # Stage 6: Publishing (return cleaned dataframe)
             logger.info("Stage 6: Publishing")
             pipeline_results["stages"]["publishing"] = {
                 "status": "completed",
@@ -177,7 +147,6 @@ class DataPipeline:
                 "rows_published": len(dataframe)
             }
 
-            # Calculate overall metrics
             end_time = datetime.utcnow()
             duration = (end_time - start_time).total_seconds()
 
@@ -212,17 +181,14 @@ class DataPipeline:
         cleaning_result: Dict,
         anomaly_result: Dict
     ) -> Dict[str, Any]:
-        """Compute final review and quality metrics."""
         total_rows = len(dataframe)
         valid_rows = validation_result["metrics"]["valid_rows"]
         anomaly_count = len(anomaly_result.get("anomalies", []))
 
-        # Calculate quality score (0-100)
         validation_score = (valid_rows / total_rows * 100) if total_rows > 0 else 0
         anomaly_penalty = (anomaly_count / total_rows * 100) if total_rows > 0 else 0
         quality_score = max(0, validation_score - anomaly_penalty)
 
-        # Calculate completeness (non-null percentage)
         null_counts = dataframe.isnull().sum()
         total_cells = total_rows * len(dataframe.columns)
         completeness = ((total_cells - null_counts.sum()) / total_cells * 100) if total_cells > 0 else 0
@@ -238,7 +204,6 @@ class DataPipeline:
         }
 
     def get_pipeline_config(self) -> Dict[str, Any]:
-        """Get complete pipeline configuration."""
         return {
             "pipeline_id": self.pipeline_id,
             "pipeline_name": "Banking Data Cleaning Pipeline",

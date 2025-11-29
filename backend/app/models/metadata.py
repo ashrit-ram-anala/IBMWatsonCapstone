@@ -6,53 +6,39 @@ from app.models.base import BaseModel
 
 
 class DatasetMetadata(BaseModel):
-    """Model for storing dataset metadata and statistics."""
-
     __tablename__ = "dataset_metadata"
 
-    # Foreign key to dataset (one-to-one relationship)
     dataset_id = Column(Integer, ForeignKey("datasets.id", ondelete="CASCADE"), unique=True, nullable=False)
 
-    # Schema information
-    columns = Column(JSON, nullable=True)  # List of column names and types
+    columns = Column(JSON, nullable=True)
     column_count = Column(Integer, default=0)
 
-    # Data quality metrics
-    completeness_score = Column(Float, default=0.0)  # % of non-null values
-    validity_score = Column(Float, default=0.0)  # % of valid values
-    consistency_score = Column(Float, default=0.0)  # % of consistent values
-    accuracy_score = Column(Float, default=0.0)  # % of accurate values
+    completeness_score = Column(Float, default=0.0)
+    validity_score = Column(Float, default=0.0)
+    consistency_score = Column(Float, default=0.0)
+    accuracy_score = Column(Float, default=0.0)
 
-    # Null statistics per column
-    null_counts = Column(JSON, nullable=True)  # {column: null_count}
-    null_percentages = Column(JSON, nullable=True)  # {column: null_percentage}
+    null_counts = Column(JSON, nullable=True)
+    null_percentages = Column(JSON, nullable=True)
 
-    # Data type statistics
-    data_types = Column(JSON, nullable=True)  # {column: inferred_type}
-    type_violations = Column(JSON, nullable=True)  # {column: violation_count}
+    data_types = Column(JSON, nullable=True)
+    type_violations = Column(JSON, nullable=True)
 
-    # Value distributions
-    unique_counts = Column(JSON, nullable=True)  # {column: unique_value_count}
-    value_distributions = Column(JSON, nullable=True)  # Top values per column
+    unique_counts = Column(JSON, nullable=True)
+    value_distributions = Column(JSON, nullable=True)
 
-    # Numeric statistics
-    numeric_stats = Column(JSON, nullable=True)  # {column: {min, max, mean, median, std}}
+    numeric_stats = Column(JSON, nullable=True)
 
-    # Date/time statistics
-    date_range = Column(JSON, nullable=True)  # {column: {min_date, max_date}}
+    date_range = Column(JSON, nullable=True)
 
-    # Cleaning operations performed
-    cleaning_summary = Column(JSON, nullable=True)  # List of cleaning operations
+    cleaning_summary = Column(JSON, nullable=True)
 
-    # Transformation log
-    transformations = Column(JSON, nullable=True)  # Detailed transformation log
+    transformations = Column(JSON, nullable=True)
 
-    # File information
     file_size_bytes = Column(Integer, nullable=True)
     file_format = Column(String, nullable=True)
     encoding = Column(String, nullable=True)
 
-    # Relationships
     dataset = relationship("Dataset", back_populates="metadata")
 
     def __repr__(self):

@@ -5,7 +5,6 @@ from app.api.v1 import ingestion, pipelines, metrics, datasets, anomalies
 
 router = APIRouter()
 
-# Include sub-routers
 router.include_router(ingestion.router, prefix="/ingest", tags=["ingestion"])
 router.include_router(pipelines.router, prefix="/pipelines", tags=["pipelines"])
 router.include_router(metrics.router, prefix="/metrics", tags=["metrics"])
