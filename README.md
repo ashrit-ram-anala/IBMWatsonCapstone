@@ -9,7 +9,7 @@ AI-powered data validation and cleaning pipeline for banking datasets using IBM 
 - **Frontend**: Angular, TypeScript, Angular Material
 - **Backend**: Python, FastAPI, SQLAlchemy
 - **Orchestration**: IBM Watsonx Orchestrate
-- **Database**: PostgreSQL 15+
+- **Database**: PostgreSQL
 - **AI/ML**: Watsonx.ai, LangChain
 
 ## Project Structure
