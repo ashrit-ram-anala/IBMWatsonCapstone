@@ -22,18 +22,6 @@ class IngestionNode:
         api_endpoint: Optional[str] = None,
         **kwargs
     ) -> Dict[str, Any]:
-        """
-        Execute the ingestion node.
-
-        Args:
-            source_type: Type of data source (csv, sql, api)
-            source_path: File path for CSV
-            connection_string: Database connection for SQL
-            api_endpoint: API URL for API sources
-
-        Returns:
-            Dictionary with ingestion results and dataframe
-        """
         logger.info(f"Starting ingestion for source_type: {source_type}")
 
         try:
