@@ -1,11 +1,13 @@
 # IBM Watsonx Banking Data Cleaning Pipeline
 
 AI-powered data validation and cleaning pipeline for banking datasets using IBM Watsonx Orchestrate.
+<img width="1440" height="599" alt="Screenshot 2025-11-28 at 11 18 22 PM" src="https://github.com/user-attachments/assets/bb436b64-20dc-4408-99d4-2e3bdc5a611a" />
+
 
 ## Tech Stack
 
-- **Frontend**: Angular 17+, TypeScript, Angular Material
-- **Backend**: Python 3.11+, FastAPI, SQLAlchemy
+- **Frontend**: Angular, TypeScript, Angular Material
+- **Backend**: Python, FastAPI, SQLAlchemy
 - **Orchestration**: IBM Watsonx Orchestrate
 - **Database**: PostgreSQL 15+
 - **AI/ML**: Watsonx.ai, LangChain
