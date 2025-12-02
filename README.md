@@ -3,6 +3,13 @@
 AI-powered data validation and cleaning pipeline for banking datasets using IBM Watsonx Orchestrate.
 <img width="1440" height="599" alt="Screenshot 2025-11-28 at 11 18 22 PM" src="https://github.com/user-attachments/assets/bb436b64-20dc-4408-99d4-2e3bdc5a611a" />
 
+## Features
+
+- Real-time data validation and cleaning
+- AI-powered anomaly detection using Watsonx.ai
+- Interactive dashboard for monitoring pipeline metrics
+- Support for multiple data sources (CSV, SQL, API)
+- Comprehensive data quality reporting
 
 ## Tech Stack
 
@@ -99,7 +106,3 @@ IBMCapstone/
 4. **Anomaly Detector Node** - AI-powered anomaly detection
 5. **Review & Feedback Node** - Logging and metrics collection
 6. **Publishing Node** - Writes validated data to PostgreSQL
-
-## License
-
-MIT
