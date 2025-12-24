@@ -67,7 +67,6 @@ IBMCapstone/
 2. **Set up environment variables**
    ```bash
    cp backend/.env.example backend/.env
-   # Edit backend/.env with your credentials
    ```
 
 3. **Start with Docker Compose**
