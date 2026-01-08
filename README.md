@@ -1,6 +1,7 @@
 # IBM Watsonx Banking Data Cleaning Pipeline
 
 AI-powered data validation and cleaning pipeline for banking datasets using IBM Watsonx Orchestrate.
+- App no longer live - Watsonx Orchestrate license needed for production app and local usage
 <img width="1440" height="599" alt="Screenshot 2025-11-28 at 11 18 22 PM" src="https://github.com/user-attachments/assets/bb436b64-20dc-4408-99d4-2e3bdc5a611a" />
 
 ## Features
